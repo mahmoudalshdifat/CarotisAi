@@ -14,7 +14,7 @@ Research & Education Tool – *Not for clinical diagnosis*
 
 ## Overview
 
-CarotisAi is a browser-based research tool that uses **Google Gemini 1.5 Flash** to analyse carotid artery ultrasound images. It supports radiology research and doctoral education by providing structured, AI-generated assessments — entirely client-side, no server required.
+CarotisAi is a browser-based research tool that uses **Google Gemini 1.5 Flash** to analyze carotid artery ultrasound images. It supports radiology research and doctoral education by providing structured, AI-generated assessments — entirely client-side, no server required.
 
 **Key highlights:**
 - 🧪 **Try it instantly** — click **[Deploy to Netlify](https://app.netlify.com/start/deploy?repository=https://github.com/mahmoudalshdifat/CarotisAi)** and the app is live in ~2 minutes with a free Gemini API key
@@ -35,7 +35,7 @@ Upload image  →  (optional) Add patient context  →  Gemini AI analysis  → 
 | Section | Details |
 |---|---|
 | **Stenosis** | Grade (normal/mild/moderate/severe/occlusion) + NASCET % estimate + haemodynamic significance |
-| **Plaque** | Location, echogenicity, texture (homo/heterogeneous), shape, ulceration, calcification |
+| **Plaque** | Location, echogenicity, texture (homogeneous/heterogeneous), shape, ulceration, calcification |
 | **IMT** | Intima-media thickness value + increased flag + comment |
 | **Flow** | Turbulence flag + reduced PSV flag + comment |
 | **Risk** | Cardiovascular risk category: `low` / `moderate` / `high` / `very-high` |
