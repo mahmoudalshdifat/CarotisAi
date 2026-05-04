@@ -5,7 +5,7 @@
 import { useNavigate } from 'react-router-dom';
 import {
   Plus, Microscope, TrendingUp, AlertTriangle, Calendar,
-  ChevronRight, Trash2, BarChart3,
+  ChevronRight, Trash2, BarChart3, FlaskConical,
 } from 'lucide-react';
 import { useApp } from '../hooks/useApp';
 import { Card, Badge, Button } from '../components/UI';
@@ -118,10 +118,16 @@ export default function DashboardPage() {
           </div>
           <h1 className="text-2xl font-bold text-slate-100 mb-1">{t('dash_welcome')}</h1>
           <p className="text-slate-400 text-sm mb-6">{t('dash_subtitle')}</p>
-          <Button size="lg" onClick={() => navigate('/analyze')}>
-            <Plus className="w-5 h-5" />
-            {t('dash_new_analysis')}
-          </Button>
+          <div className="flex items-center gap-3 flex-wrap">
+            <Button size="lg" onClick={() => navigate('/analyze')}>
+              <Plus className="w-5 h-5" />
+              {t('dash_new_analysis')}
+            </Button>
+            <Button size="lg" variant="outline" onClick={() => navigate('/analyze?demo=1')}>
+              <FlaskConical className="w-4 h-4" />
+              View Demo
+            </Button>
+          </div>
         </div>
       </div>
 

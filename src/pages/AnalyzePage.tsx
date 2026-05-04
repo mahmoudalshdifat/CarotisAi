@@ -3,8 +3,8 @@
 // ──────────────────────────────────────────────────────────────────────────────
 
 import { useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FileDown, RotateCcw, AlertCircle, Key } from 'lucide-react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { FileDown, RotateCcw, AlertCircle, Key, FlaskConical } from 'lucide-react';
 import { useApp } from '../hooks/useApp';
 import ImageUpload from '../components/Upload';
 import PatientContextForm from '../components/Upload/PatientContextForm';
@@ -12,6 +12,7 @@ import AnalysisResults from '../components/Analysis';
 import { Button, Alert, Spinner, Card } from '../components/UI';
 import { analyseCarotidImage } from '../services/gemini';
 import { generatePDF } from '../components/Report/pdfGenerator';
+import { DEMO_RESULT } from '../utils/demoData';
 import type { PatientContext, AnalysisSession } from '../types';
 
 type Step = 'upload' | 'analyzing' | 'results';
@@ -19,13 +20,28 @@ type Step = 'upload' | 'analyzing' | 'results';
 export default function AnalyzePage() {
   const { t, apiKey, addSession, updateSession } = useApp();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const isDemo = searchParams.get('demo') === '1';
 
-  const [step,           setStep]           = useState<Step>('upload');
+  const [step,           setStep]           = useState<Step>(isDemo ? 'results' : 'upload');
   const [imageFile,      setImageFile]       = useState<File | null>(null);
   const [previewUrl,     setPreviewUrl]      = useState<string | null>(null);
   const [patientContext, setPatientContext]  = useState<PatientContext | null>(null);
-  const [session,        setSession]         = useState<AnalysisSession | null>(null);
-  const [error,          setError]           = useState<string | null>(null);
+  const [session,        setSession]         = useState<AnalysisSession | null>(
+    isDemo
+      ? {
+          id: DEMO_RESULT.id,
+          uploadedImage: {
+            file: new File([], DEMO_RESULT.imageFileName),
+            previewUrl: '',
+            uploadedAt: DEMO_RESULT.timestamp,
+          },
+          status: 'complete',
+          result: DEMO_RESULT,
+        }
+      : null,
+  );
+  const [error, setError] = useState<string | null>(null);
 
   // ── Image selection ─────────────────────────────────────────────────────────
   const handleImageSelected = useCallback((file: File, url: string) => {
@@ -89,7 +105,9 @@ export default function AnalyzePage() {
     setSession(null);
     setPatientContext(null);
     setError(null);
-  }, [handleClear]);
+    // Remove demo param if present
+    if (isDemo) navigate('/analyze', { replace: true });
+  }, [handleClear, isDemo, navigate]);
 
   // ── PDF download ─────────────────────────────────────────────────────────────
   const handleDownloadPDF = useCallback(() => {
@@ -120,6 +138,25 @@ export default function AnalyzePage() {
   if (step === 'results' && session?.result) {
     return (
       <div className="max-w-3xl mx-auto p-6 space-y-4">
+        {/* Demo banner */}
+        {isDemo && (
+          <Alert variant="info">
+            <div className="flex items-center gap-2">
+              <FlaskConical className="w-4 h-4 shrink-0" />
+              <span>
+                <strong>Demo mode</strong> — these are sample results. To analyse a real image,{' '}
+                <button onClick={handleReset} className="underline hover:text-sky-100">
+                  start a new analysis
+                </button>{' '}
+                after adding your{' '}
+                <button onClick={() => navigate('/settings')} className="underline hover:text-sky-100">
+                  Gemini API key
+                </button>.
+              </span>
+            </div>
+          </Alert>
+        )}
+
         {/* Actions bar */}
         <div className="flex items-center gap-3 flex-wrap">
           <Button variant="secondary" onClick={handleReset}>
@@ -147,12 +184,12 @@ export default function AnalyzePage() {
         </p>
       </div>
 
-      {/* API key warning */}
+      {/* API key warning with demo shortcut */}
       {!apiKey && (
         <Alert variant="warning">
           <div className="flex items-start gap-2">
             <Key className="w-4 h-4 shrink-0 mt-0.5" />
-            <div>
+            <div className="flex-1">
               <p className="font-medium">No API key configured</p>
               <p className="text-xs opacity-80 mt-0.5">
                 Add your Google Gemini API key in{' '}
@@ -162,7 +199,13 @@ export default function AnalyzePage() {
                 >
                   Settings
                 </button>{' '}
-                before analysing.
+                before analysing, or{' '}
+                <button
+                  onClick={() => navigate('/analyze?demo=1')}
+                  className="underline hover:text-amber-100 font-medium"
+                >
+                  view a demo result
+                </button>.
               </p>
             </div>
           </div>
