@@ -9,9 +9,9 @@ Research & Education Tool – *Not for clinical diagnosis*
 
 ## Overview
 
-CarotisAi is a web-based research tool that uses **Google Gemini AI** to analyse carotid artery ultrasound images. It supports radiology research and doctoral education by providing structured AI-generated assessments.
+CarotisAi is a web-based research tool that uses **Google Gemini AI** to analyze carotid artery ultrasound images. It supports radiology research and doctoral education by providing structured AI-generated assessments.
 
-### Analyse in 3 steps
+### Analyze in 3 steps
 
 1. **Upload** a carotid ultrasound image (JPEG / PNG / WebP / BMP)
 2. **Optionally** add patient context (age group, sex, risk factors)
@@ -130,7 +130,7 @@ src/
 ├── i18n/
 │   └── index.ts       # EN / DE / AR translations
 ├── pages/
-│   ├── AnalyzePage.tsx    # Upload → Analyse → Results (+ demo mode)
+│   ├── AnalyzePage.tsx    # Upload → Analyze → Results (+ demo mode)
 │   ├── DashboardPage.tsx  # Stats + recent analyses
 │   ├── HistoryPage.tsx    # All past analyses with search
 │   ├── SettingsPage.tsx   # API key + language

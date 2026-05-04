@@ -32,7 +32,8 @@ export default function AnalyzePage() {
       ? {
           id: DEMO_RESULT.id,
           uploadedImage: {
-            file: new File([], DEMO_RESULT.imageFileName),
+            // Intentionally empty: demo mode uses pre-built result data, not a real image file.
+            file: new File([], DEMO_RESULT.imageFileName, { type: 'image/jpeg' }),
             previewUrl: '',
             uploadedAt: DEMO_RESULT.timestamp,
           },
@@ -144,7 +145,7 @@ export default function AnalyzePage() {
             <div className="flex items-center gap-2">
               <FlaskConical className="w-4 h-4 shrink-0" />
               <span>
-                <strong>Demo mode</strong> — these are sample results. To analyse a real image,{' '}
+                <strong>Demo mode</strong> — these are sample results. To analyze a real image,{' '}
                 <button onClick={handleReset} className="underline hover:text-sky-100">
                   start a new analysis
                 </button>{' '}
